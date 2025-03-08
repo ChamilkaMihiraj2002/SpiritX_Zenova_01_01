@@ -39,11 +39,24 @@ function Signup() {
 
     // Strength Indicator
     let strength = "Weak";
-    if (password.length >= 12) strength = "Strong";
-    else if (password.length >= 8) strength = "Medium";
+    strength = calculatePasswordStrength(password);
 
     setPasswordStrength(strength);
     return error;
+  };
+
+  const calculatePasswordStrength = (password) => {
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (password.length >= 12) score++;
+    if (password.match(/[a-z]/)) score++;
+    if (password.match(/[A-Z]/)) score++;
+    if (password.match(/[0-9]/)) score++;
+    if (password.match(/[^a-zA-Z0-9]/)) score++;
+
+    if (score <= 2) return "Weak";
+    if (score <= 4) return "Medium";
+    return "Strong";
   };
 
   // Validate Confirm Password
@@ -207,7 +220,20 @@ function Signup() {
           {/* Signup Button */}
           <button
             type="submit"
-            className="w-full bg-green-600 text-white font-semibold py-3 my-4 rounded-lg hover:bg-green-700 transition duration-300 shadow-md active:scale-95"
+            disabled={
+              Object.values(errors).some((err) => err !== "") ||
+              !formData.username ||
+              !formData.password ||
+              !formData.confirmPassword
+            }
+            className={`w-full font-semibold py-3 my-4 rounded-lg transition duration-300 shadow-md active:scale-95 ${
+              Object.values(errors).some((err) => err !== "") ||
+              !formData.username ||
+              !formData.password ||
+              !formData.confirmPassword
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-700 text-white"
+            }`}
           >
             Signup
           </button>
