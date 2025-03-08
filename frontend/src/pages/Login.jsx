@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../authService";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -38,7 +37,7 @@ function Login() {
   };
 
   // Handle Form Submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {
       username: validateUsername(formData.username),
@@ -49,18 +48,36 @@ function Login() {
     setGlobalError("");
 
     if (Object.values(newErrors).every((error) => error === "")) {
-      const result = loginUser({
-        username: formData.username,
-        password: formData.password,
-      });
+      try {
+        const response = await fetch('http://localhost:3000/api/users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: formData.username,
+            password: formData.password,
+          }),
+        });
 
-      if (result.success) {
-        alert("Login successful! Redirecting to dashboard...");
-        setTimeout(() => {
-          navigate("/landing"); // Ensure this is working
-        }, 2000);
-      } else {
-        setGlobalError(result.message);
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          // Store token, user data, and login status in localStorage
+          localStorage.setItem('accessToken', data.accessToken);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('currentUser', data.user.username); // For Landing page username display
+          
+          alert("Login successful! Redirecting to dashboard...");
+          setTimeout(() => {
+            navigate("/landing");
+          }, 2000);
+        } else {
+          setGlobalError(data.message || "Login failed. Please try again.");
+        }
+      } catch (error) {
+        setGlobalError("Network error. Please try again later.");
       }
     } else {
       setGlobalError("Please fix the errors before proceeding.");

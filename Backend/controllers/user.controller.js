@@ -48,10 +48,10 @@ const getUser = async (req, res) => {
         const user = await User.findOne({ username }, '-password');
 
         if (!user) {
-            return res.status(404).json({ message: `User not found with username: ${username}` });
+            return res.status(200).json({ available: true });
         }
 
-        res.status(200).json(user);
+        return res.status(200).json({ available: false });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
