@@ -106,27 +106,30 @@ function Signup() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-b from-white to-green-50">
-      <div>
-        {/* name of the website as a topic */}
-        <h1 className="text-4xl font-bold text-center text-gray-800">
+    <div className="flex flex-col justify-evenly items-center min-h-screen bg-gradient-to-b from-white to-green-50">
+      <div className="bg-white p-8 rounded-2xl shadow-lg w-120">
+        <h1 className="text-4xl mb-6 font-bold text-center text-green-500">
           Auth System
         </h1>
-      </div>
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-96">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Signup
+        <h2 className="text-2xl font-bold text-center text-gray-800 ">
+          Create an account
         </h2>
         <p className="text-gray-500 text-center mb-6">
           Enter your credentials to create your account
         </p>
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-3">
           {/* Username Field */}
           <div>
+            <label
+              htmlFor="username"
+              className="text-sm font-medium mb-1 -ml-1"
+            >
+              Username
+            </label>
             <input
               type="text"
               name="username"
-              placeholder="Username"
+              placeholder="enter your username"
               value={formData.username}
               onChange={handleChange}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200 transition"
@@ -138,10 +141,16 @@ function Signup() {
 
           {/* Password Field */}
           <div>
+            <label
+              htmlFor="password"
+              className="text-sm font-medium mb-1 -ml-1"
+            >
+              Password
+            </label>
             <input
               type="password"
               name="password"
-              placeholder="Password"
+              placeholder="enter your password"
               value={formData.password}
               onChange={handleChange}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200 transition"
@@ -167,10 +176,16 @@ function Signup() {
 
           {/* Confirm Password Field */}
           <div>
+            <label
+              htmlFor="confirmPassword"
+              className="text-sm font-medium mb-1 -ml-1"
+            >
+              Confirm Password
+            </label>
             <input
               type="password"
               name="confirmPassword"
-              placeholder="Confirm Password"
+              placeholder="confirm your password"
               value={formData.confirmPassword}
               onChange={handleChange}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200 transition"
@@ -192,11 +207,21 @@ function Signup() {
           {/* Signup Button */}
           <button
             type="submit"
-            className="w-full bg-green-600 text-white font-semibold py-3 rounded-lg hover:bg-green-700 transition duration-300 shadow-md active:scale-95"
+            className="w-full bg-green-600 text-white font-semibold py-3 my-4 rounded-lg hover:bg-green-700 transition duration-300 shadow-md active:scale-95"
           >
             Signup
           </button>
         </form>
+
+        <p className="text-gray-500 text-center">
+          Already have an account?{" "}
+          <a
+            href="/login"
+            className="text-green-500 font-semibold hover:underline"
+          >
+            Login
+          </a>
+        </p>
       </div>
     </div>
   );
