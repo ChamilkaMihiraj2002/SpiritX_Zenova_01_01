@@ -2,11 +2,12 @@ import { Routes, Route, Link } from "react-router-dom";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Landing from "./pages/Landing";
+import "./App.css";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100">
-      <nav className="bg-blue-500 p-4 text-white">
+    <div className=" bg-gray-100">
+      {/* <nav className="bg-blue-500 p-4 text-white">
         <div className="container mx-auto flex justify-between">
           <h1 className="text-xl font-bold">Auth System</h1>
           <div className="space-x-4">
@@ -18,10 +19,10 @@ function App() {
             </Link>
           </div>
         </div>
-      </nav>
+      </nav> */}
 
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Signup />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/landing" element={<Landing />} />
