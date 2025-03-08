@@ -49,13 +49,15 @@ function Login() {
     setGlobalError("");
 
     if (Object.values(newErrors).every((error) => error === "")) {
-      const result = loginUser(formData.username, formData.password);
+      const result = loginUser({
+        username: formData.username,
+        password: formData.password,
+      });
 
       if (result.success) {
         alert("Login successful! Redirecting to dashboard...");
-        // Redirect to dashboard after 2 seconds
         setTimeout(() => {
-          navigate("/dashboard");
+          navigate("/landing"); // Ensure this is working
         }, 2000);
       } else {
         setGlobalError(result.message);
