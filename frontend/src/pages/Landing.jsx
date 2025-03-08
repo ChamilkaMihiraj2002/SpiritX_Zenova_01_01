@@ -8,7 +8,7 @@ function Landing() {
   useEffect(() => {
     // Check if user is logged in
     const isLoggedIn = localStorage.getItem("isLoggedIn");
-    const currentUser = localStorage.getItem("currentUser");
+    const currentUser = localStorage.getItem("user");
 
     if (!isLoggedIn || !currentUser) {
       // If not logged in, redirect to login page
@@ -19,9 +19,11 @@ function Landing() {
   }, [navigate]);
 
   const handleLogout = () => {
-    // Clear session
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("currentUser");
+    // Clear all auth-related items
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('user');
 
     // Redirect to login page
     navigate("/login");

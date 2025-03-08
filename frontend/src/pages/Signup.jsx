@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { addUser, getUsers } from "../authService";
 
 function Signup() {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
     confirmPassword: "",
+    email: "", // Added email field
   });
 
   const [errors, setErrors] = useState({});
@@ -14,13 +14,30 @@ function Signup() {
   const [passwordStrength, setPasswordStrength] = useState("");
   const navigate = useNavigate();
 
-  const usedUsernames = getUsers().map((user) => user.username);
-
-  const validateUsername = (username) => {
+  // Validate Username with API
+  const validateUsername = async (username) => {
     if (!username) return "Username is required";
     if (username.length < 8) return "Username must be at least 8 characters";
-    if (usedUsernames.includes(username.toLowerCase()))
-      return "Username is already taken";
+    
+    try {
+      const response = await fetch(`http://localhost:3000/api/users/${username}`);
+      const data = await response.json();
+      
+      if (!data.available) {
+        return "Username is already taken";
+      }
+      return "";
+    } catch (error) {
+      console.error("Username validation error:", error);
+      return "Error validating username";
+    }
+  };
+
+  // Validate Email
+  const validateEmail = (email) => {
+    if (!email) return "Email is required";
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return "Invalid email format";
     return "";
   };
 
@@ -54,36 +71,58 @@ function Signup() {
     return confirmPassword !== password ? "Passwords do not match" : "";
   };
 
-  const handleChange = (e) => {
+
+  // Handle Input Changes
+  const handleChange = async (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     let newErrors = { ...errors };
-    if (name === "username") newErrors.username = validateUsername(value);
-    if (name === "password") newErrors.password = validatePassword(value);
-    if (name === "confirmPassword")
+    if (name === "username") {
+      newErrors.username = await validateUsername(value);
+    }
+    if (name === "email") {
+      newErrors.email = validateEmail(value);
+    }
+    if (name === "password") {
+      newErrors.password = validatePassword(value);
+    }
+    if (name === "confirmPassword") {
       newErrors.confirmPassword = validateConfirmPassword(value, formData.password);
+    }
+
     setErrors(newErrors);
   };
 
-  const handleSubmit = (e) => {
+  // Handle Form Submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newErrors = {
-      username: validateUsername(formData.username),
-      password: validatePassword(formData.password),
-      confirmPassword: validateConfirmPassword(formData.confirmPassword, formData.password),
-    };
-    setErrors(newErrors);
-    setGlobalError("");
-    if (Object.values(newErrors).every((error) => error === "")) {
-      const result = addUser({ username: formData.username, password: formData.password });
-      if (result.success) {
+    
+    try {
+      const response = await fetch('http://localhost:3000/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          password: formData.password,
+          email: formData.email,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
         alert("Signup successful! Redirecting to login...");
-        setTimeout(() => navigate("/login"), 2000);
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
       } else {
-        setGlobalError(result.message);
+        setGlobalError(data.message || "Registration failed");
       }
-    } else {
-      setGlobalError("Please fix the errors before proceeding.");
+    } catch (error) {
+      console.error("Registration error:", error);
+      setGlobalError("Registration failed. Please try again.");
     }
   };
 
@@ -99,6 +138,25 @@ function Signup() {
             <input type="text" name="username" placeholder="Enter your username" value={formData.username} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-200"/>
             {errors.username && <p className="text-red-500 text-sm mt-1">{errors.username}</p>}
           </div>
+          {/* Email Field - New */}
+          <div>
+            <label htmlFor="email" className="text-sm font-medium mb-1 -ml-1">
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              placeholder="enter your email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200 transition"
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            )}
+          </div>
+
+          {/* Password Field */}
           <div>
             <label className="text-sm font-medium mb-1 -ml-1">Password</label>
             <input type="password" name="password" placeholder="Enter your password" value={formData.password} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-200"/>
