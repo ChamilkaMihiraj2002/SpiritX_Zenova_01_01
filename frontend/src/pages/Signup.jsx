@@ -106,11 +106,20 @@ function Signup() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-500 to-purple-600">
+    <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-b from-white to-green-50">
+      <div>
+        {/* name of the website as a topic */}
+        <h1 className="text-4xl font-bold text-center text-gray-800">
+          Auth System
+        </h1>
+      </div>
       <div className="bg-white p-8 rounded-2xl shadow-lg w-96">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
           Signup
         </h2>
+        <p className="text-gray-500 text-center mb-6">
+          Enter your credentials to create your account
+        </p>
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Username Field */}
           <div>
@@ -120,7 +129,7 @@ function Signup() {
               placeholder="Username"
               value={formData.username}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200 transition"
             />
             {errors.username && (
               <p className="text-red-500 text-sm mt-1">{errors.username}</p>
@@ -135,7 +144,7 @@ function Signup() {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200 transition"
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">{errors.password}</p>
@@ -164,7 +173,7 @@ function Signup() {
               placeholder="Confirm Password"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200 transition"
             />
             {errors.confirmPassword && (
               <p className="text-red-500 text-sm mt-1">
@@ -183,7 +192,7 @@ function Signup() {
           {/* Signup Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition duration-300 shadow-md active:scale-95"
+            className="w-full bg-green-600 text-white font-semibold py-3 rounded-lg hover:bg-green-700 transition duration-300 shadow-md active:scale-95"
           >
             Signup
           </button>
