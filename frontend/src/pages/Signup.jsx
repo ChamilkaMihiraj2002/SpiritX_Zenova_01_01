@@ -106,10 +106,12 @@ function Signup() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-semibold text-center mb-4">Signup</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-500 to-purple-600">
+      <div className="bg-white p-8 rounded-2xl shadow-lg w-96">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          Signup
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-5">
           {/* Username Field */}
           <div>
             <input
@@ -118,7 +120,7 @@ function Signup() {
               placeholder="Username"
               value={formData.username}
               onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             />
             {errors.username && (
               <p className="text-red-500 text-sm mt-1">{errors.username}</p>
@@ -133,7 +135,7 @@ function Signup() {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">{errors.password}</p>
@@ -141,7 +143,7 @@ function Signup() {
             {/* Password Strength Indicator */}
             {formData.password && (
               <p
-                className={`text-sm mt-1 ${
+                className={`text-sm mt-1 font-medium ${
                   passwordStrength === "Strong"
                     ? "text-green-500"
                     : passwordStrength === "Medium"
@@ -162,7 +164,7 @@ function Signup() {
               placeholder="Confirm Password"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             />
             {errors.confirmPassword && (
               <p className="text-red-500 text-sm mt-1">
@@ -173,7 +175,7 @@ function Signup() {
 
           {/* Global Authentication Errors */}
           {globalError && (
-            <p className="text-red-500 text-sm text-center mb-2">
+            <p className="text-red-500 text-sm text-center mb-2 font-medium">
               {globalError}
             </p>
           )}
@@ -181,7 +183,7 @@ function Signup() {
           {/* Signup Button */}
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+            className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition duration-300 shadow-md active:scale-95"
           >
             Signup
           </button>
