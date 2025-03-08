@@ -69,7 +69,7 @@ function Login() {
     <div className="flex flex-col justify-evenly items-center min-h-screen bg-gradient-to-b from-white to-green-50">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-120">
         <h1 className="text-4xl mb-6 font-bold text-center text-green-500">
-          Auth System
+          SecureConnect!
         </h1>
         <h2 className="text-2xl font-bold text-center text-gray-800">
           Login to your account
