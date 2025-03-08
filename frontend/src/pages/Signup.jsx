@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { addUser, getUsers } from "../authService";
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -8,27 +10,49 @@ function Signup() {
   });
 
   const [errors, setErrors] = useState({});
-  const [usedUsernames] = useState(["testuser", "admin", "user123"]); // Simulating existing usernames
+  const [globalError, setGlobalError] = useState("");
+  const [passwordStrength, setPasswordStrength] = useState("");
+  const navigate = useNavigate();
 
+  // Get existing usernames
+  const usedUsernames = getUsers().map((user) => user.username);
+
+  // Validate Username
   const validateUsername = (username) => {
+    if (!username) return "Username is required";
     if (username.length < 8) return "Username must be at least 8 characters";
     if (usedUsernames.includes(username.toLowerCase()))
       return "Username is already taken";
     return "";
   };
 
+  // Validate Password & Strength Indicator
   const validatePassword = (password) => {
-    if (!password.match(/[a-z]/)) return "Must include a lowercase letter";
-    if (!password.match(/[A-Z]/)) return "Must include an uppercase letter";
-    if (!password.match(/[^a-zA-Z0-9]/))
-      return "Must include a special character";
-    return "";
+    if (!password) return "Password is required";
+
+    let error = "";
+    if (!password.match(/[a-z]/)) error = "Must include a lowercase letter";
+    else if (!password.match(/[A-Z]/))
+      error = "Must include an uppercase letter";
+    else if (!password.match(/[^a-zA-Z0-9]/))
+      error = "Must include a special character";
+
+    // Strength Indicator
+    let strength = "Weak";
+    if (password.length >= 12) strength = "Strong";
+    else if (password.length >= 8) strength = "Medium";
+
+    setPasswordStrength(strength);
+    return error;
   };
 
+  // Validate Confirm Password
   const validateConfirmPassword = (confirmPassword, password) => {
+    if (!confirmPassword) return "Please confirm your password";
     return confirmPassword !== password ? "Passwords do not match" : "";
   };
 
+  // Handle Input Changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -46,6 +70,7 @@ function Signup() {
     setErrors(newErrors);
   };
 
+  // Handle Form Submission
   const handleSubmit = (e) => {
     e.preventDefault();
     const newErrors = {
@@ -58,10 +83,25 @@ function Signup() {
     };
 
     setErrors(newErrors);
+    setGlobalError("");
 
     if (Object.values(newErrors).every((error) => error === "")) {
-      console.log("Signup Data:", formData);
-      alert("Signup successful!");
+      const result = addUser({
+        username: formData.username,
+        password: formData.password,
+      });
+
+      if (result.success) {
+        alert("Signup successful! Redirecting to login...");
+        // Redirect to login page after 2 seconds
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      } else {
+        setGlobalError(result.message);
+      }
+    } else {
+      setGlobalError("Please fix the errors before proceeding.");
     }
   };
 
@@ -98,6 +138,20 @@ function Signup() {
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">{errors.password}</p>
             )}
+            {/* Password Strength Indicator */}
+            {formData.password && (
+              <p
+                className={`text-sm mt-1 ${
+                  passwordStrength === "Strong"
+                    ? "text-green-500"
+                    : passwordStrength === "Medium"
+                    ? "text-yellow-500"
+                    : "text-red-500"
+                }`}
+              >
+                Strength: {passwordStrength}
+              </p>
+            )}
           </div>
 
           {/* Confirm Password Field */}
@@ -116,6 +170,13 @@ function Signup() {
               </p>
             )}
           </div>
+
+          {/* Global Authentication Errors */}
+          {globalError && (
+            <p className="text-red-500 text-sm text-center mb-2">
+              {globalError}
+            </p>
+          )}
 
           {/* Signup Button */}
           <button
