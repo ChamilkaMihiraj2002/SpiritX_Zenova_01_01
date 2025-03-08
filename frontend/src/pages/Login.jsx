@@ -85,7 +85,7 @@ function Login() {
   };
 
   return (
-    <div className="flex flex-col justify-evenly items-center min-h-screen bg-gradient-to-b from-white to-green-50">
+    <div className="flex flex-col justify-center items-center min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/background.jpg')" }}>
       <div className="bg-white p-8 rounded-2xl shadow-lg w-120">
         <h1 className="text-4xl mb-6 font-bold text-center text-green-500">
           SecureConnect!
