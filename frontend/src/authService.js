@@ -48,6 +48,10 @@ export const loginUser = (credentials) => {
     return { success: false, message: "Incorrect password" };
   }
 
+  // Store user info in localStorage
+  localStorage.setItem("isLoggedIn", "true");
+  localStorage.setItem("currentUser", user.username);
+
   return { success: true, user: { username: user.username } };
 };
 
